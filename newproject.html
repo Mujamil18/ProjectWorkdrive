@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="newproject.css">
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
+
+
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo">
+                <!--            <img src="https://cdn-icons-png.flaticon.com/512/8860/8860019.png" alt="Logo">-->
+                <h1>Drox</h1>
+            </div>
+    
+            <nav class="menu-box">
+                <div class="menu" data-category="Dashboard">
+                    <i class="fi fi-rr-apps"></i>
+                    <p>Dashboard</p>
+                </div>
+                <div class="menu active" data-category="All Files">
+                    <i class="fi fi-rr-folder"></i>
+                    <p>All Files</p>
+                </div>
+                
+                <div class="menu" data-category="Favorites">
+                    <i class="fi fi-rr-star" style="color:#24b4fb"></i>
+                    <p>Favorites</p>
+                </div>
+                <div class="menu" data-category="code">
+                    <i class="fi fi-rr-square-code"></i>    
+                    <p>Code</p>
+                </div>
+                <div id="code-options">
+                    <!-- preview files
+                         open compiler
+                    -->
+                </div>
+    
+                
+                <div class="menu" data-category="Trash">
+                    <i class="fi fi-rr-trash"></i>        
+                    <p>Trash</p>
+                </div>
+
+                <br>
+                <br>
+                <p style="color:white">FILES</p>
+
+                <div class="menu" data-category="Videos">
+                    <i class="fi fi-rr-video-camera-alt"></i>
+                    <p>Videos</p>
+                </div>
+
+                <div class="menu" data-category="Images">
+                    <i class="fi fi-rr-picture"></i>
+                    <p>Images</p>
+                </div>
+
+                <div class="menu" data-category="Other Files">
+                    <i class="fi fi-rr-poll-h"></i>
+                    <p>Other Files</p>
+                </div>
+
+                <div class="menu-last">
+                    <div class="menu" data-category="Settings">
+                        <i class="fi fi-rr-settings"></i>  
+                        <p>Settings</p>
+                    </div>
+                </div>"
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <div class="top-bar">
+                <h3> Welcome, Mujamil...!</h3>
+                <div class="search-bar">
+                    <div class="container-input">
+                        <input type="text" placeholder="Search your files" name="text" class="input">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                        <div id="dropdown" class="dropdown"></div>
+                    </div>
+                    
+                    <button id="voice-btn" ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mic"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg></button>              
+                </div>
+              </div>
+                <!-- <button id="voice-btn" class="voice-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#402002" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mic"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>                </button> -->            
+    
+            <div class="files">
+                <hr>
+                <div class="body-top">
+                    <h2 id="category-title">All Files</h2>
+    
+                    <!-- Modal Structure -->
+                    <!-- Modal structure -->
+                    <!--<div id="initialfetch-fileModal" class="modal" style="display:none;">
+                        <div id="initialfetch-modalContent" class="modal-content">
+                            <span id="initialfetch-closeModal" class="close">&times;</span>
+                            <div id="initialfetch-modalBody">
+                                File content (iframe) will be inserted here 
+                            </div>
+                        </div>
+                    </div>-->
+    
+    
+                    <!-- Link to open file in a modal -->
+    
+    
+                    <form id="upload-form" enctype="multipart/form-data">
+                        <label for="file-input" class="upload-btn">
+                                <span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-upload"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                                    Upload
+                                  </span>
+                        </label>
+                        <input type="file" id="file-input" multiple>
+                    </form>
+    
+                </div>
+                <div class="files-grid" id="preview-container"></div>
+            </div>
+        </main>
+
+        <aside class="box3">
+            <div class="right-top-bar">
+                <div class="icons">
+                    <i class="fi fi-rr-document"></i>
+                    <p>File Preview</p>
+                </div>
+                
+                <div class="profile">
+                    <img src="https://i.pinimg.com/236x/68/31/12/68311248ba2f6e0ba94ff6da62eac9f6.jpg" width="30%" class="user">
+                </div>
+            </div>
+            <hr>
+            <h1 class="preview-header" style="text-align:center;margin:130px 20px 20px 20px;">File Preview</h1>
+            <div id="metadata-display" class="file-info-card"></div>
+
+            <div class="bot-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bot-message-square"><path d="M12 6V2H8"/><path d="m8 18-4 4V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2Z"/><path d="M2 12h2"/><path d="M9 11v2"/><path d="M15 11v2"/><path d="M20 12h2"/></svg>
+            </div>
+        </aside>
+    
+        <script src="newproject.js"></script>
+</body>
+
+</html>

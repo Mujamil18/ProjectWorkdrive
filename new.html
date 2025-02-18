@@ -1,0 +1,3190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenDrive</title>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/css/css.min.js"></script>
+</head>
+
+<style>
+    * {
+       margin: 0;
+       padding: 0;
+       box-sizing: border-box;
+   }
+
+   body {
+       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+       background-color: #f8f9fa;
+       color: #333;
+       transition: background-color 0.3s ease;
+   }
+   .container{
+   display:flex;
+   background-color:rgb(237, 237, 237);
+   align-items: center;
+   justify-content: center;
+   }
+   .sidebar {
+       height:99vh;
+       width: 12%;
+       padding: 1.5rem;
+       display: flex;
+       flex-direction: column;
+       transition: transform 0.3s ease-in-out;
+       transition: width 0.5s ease;
+       border-radius: 20px;
+       background-color: black;
+       margin: 0 auto;
+   }
+
+   .logo {
+       display: flex;
+       align-items: center;
+       gap: 1rem;
+       margin-bottom: 2rem;
+       animation: slideIn 0.5s ease-in-out;
+   }
+
+   .logo{
+       display:flex;
+       flex-direction:column;
+
+   }
+   .logo img {
+       width: 40px;
+       height: 40px;
+   }
+   .modal-content img{
+       width:100%;
+   }
+
+
+   .logo h1 {
+       color: white;
+       font-size: 1.5rem;
+       font-weight: 600;
+   }
+
+   .menu {
+       display: flex;
+       flex-direction:row;
+       margin-bottom:20px;
+       align-items: center;
+       gap: 1rem;
+       padding: 0.75rem 1rem;
+       color: #a0aec0;
+       cursor: pointer;
+       z-index: 10;
+       border-radius: 0.5rem;
+       transition: all 0.3s ease;
+   }
+
+   .menu:hover {
+       background-color: #2d3748;
+       color: white;
+       transform: scale(1.1);
+   }
+
+
+   .menu.active {
+       background-color: #7008e8;
+       color: white;
+   }
+
+   .menu i {
+       font-size: 1.2rem;
+   }
+
+   .menuHead {
+       font-size: 1.2rem;
+   }
+
+   .uploadPage {
+
+       margin-top: auto;
+       padding-top: 1rem;
+   }
+
+   .upload-btn {
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       width: 100%;
+       padding: 0.75rem;
+       background-color: #7008e8;
+       color: white;
+       border-radius: 0.5rem;
+       cursor: pointer;
+       transition: background-color 0.3s ease, transform 0.3s ease;
+   }
+
+   .upload-btn:hover {
+       background-color: #3e0283;
+       transform: scale(1.05);
+   }
+
+   .plus-icon {
+       font-size: 10px;
+   }
+
+   #file-input {
+       display: none;
+   }
+
+   .box2 {
+       overflow-y:auto;
+       height:100vh;
+       width:65%;
+       margin:auto;
+       padding: 1.5rem;
+
+   }
+   .box2::-webkit-scrollbar {
+       width: 0px; /* Hides the scrollbar */
+       background: transparent; /* Make the background transparent */
+   }
+
+   .nav {
+       display: flex;
+       align-items: center;
+       margin-bottom: 2rem;
+   }
+
+   .searchNav {
+       display: flex;
+       align-items: center;
+       gap: 1rem; /* Increased gap for a more spacious feel */
+       background-color: #f7f7f7; /* Light grey background for a subtle modern touch */
+       padding: 0.75rem 1.25rem; /* Slightly smaller padding for a sleeker look */
+       border-radius: 2rem; /* Rounded edges */
+       width: 100%; /* Full width responsiveness */
+       max-width: 500px; /* Limiting the maximum width */
+       position: relative;
+       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Lighter, softer shadow */
+       transition: width 0.3s ease, box-shadow 0.3s ease; /* Transition for width and shadow */
+       font-family: 'Arial', sans-serif; /* Clean, modern font */
+   }
+
+   .searchNav:hover {
+       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Slightly bigger shadow on hover */
+   }
+
+   .searchNav input {
+       outline: none;
+       background-color: transparent;
+       flex-grow: 1;
+       font-size: 1rem;
+       color: #333;
+       padding: 0.5rem;
+       transition: width 0.3s ease, padding 0.3s ease;
+       font-family: inherit;
+   }
+
+   .inputBox::placeholder {
+       color: #aaa; /* Soft grey placeholder color */
+   }
+
+   .searchNav input:focus {
+       width: 90%; /* Expand the input width when focused */
+       padding: 0.6rem; /* Padding increases slightly on focus */
+   }
+   .voice-btn {
+           background-color: transparent;
+           border: none;
+           cursor: pointer;
+           font-size: 20px;
+           margin-right: 10px;
+           color: #555;
+       }
+   .inputBox {
+       border: none;
+       background: none;
+       outline: none;
+       font-size: 1rem;
+       width: 100%;
+   }
+
+   .profile {
+       display: flex;
+       align-items: center;
+       justify-content:center;
+       gap: 1rem;
+   }
+
+   .profile img {
+       width: 52px;
+       height: 52px;
+       border-radius: 50%;
+       cursor: pointer;
+       transition: transform 0.3s ease;
+   }
+
+   .profile img:hover {
+       transform: scale(1.1);
+   }
+
+   .content {
+       overflow-y:auto;
+       justify-content:space-between;
+       align-items:center;
+       padding: 1.5rem;
+   }
+
+   #category-title {
+       font-size: 1.5rem;
+       font-weight: 600;
+       text-transform: capitalize;
+       opacity: 0;
+       animation: fadeIn 0.5s ease forwards;
+   }
+
+   .files-grid {
+       display: grid;
+       grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+       gap: 1.5rem;
+   }
+
+   .file-card {
+       background-color: white;
+       flex-direction:column;
+       border-radius: 0.5rem;
+       overflow: hidden;
+       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+       position: relative;
+       transition: transform 0.3s ease;
+   }
+
+
+   .file-card:hover {
+       transform: translateY(-5px);
+   }
+
+   .file-preview {
+       position: relative;
+       transition: transform 0.3s ease;
+   }
+
+   .thumbnail {
+       width: 100%;
+       height: 100%;
+       object-fit: cover;
+       cursor: pointer;
+   }
+
+   .file-info {
+       padding: 0.75rem;
+   }
+
+   .file-info h1{
+        font-size:24px;
+   }
+
+   .file-name {
+       font-size: 0.875rem;
+       font-weight: 500;
+   }
+
+   .file-actions {
+       position: absolute;
+       top: 0.5rem;
+       right: 0.5rem;
+   }
+
+   .action-button {
+       background-color: white;
+       border: none;
+       width: 32px;
+       height: 32px;
+       border-radius: 50%;
+       cursor: pointer;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+       transition: background-color 0.3s ease;
+   }
+
+   .action-button:hover {
+       background-color: #f1f5f9;
+   }
+
+   .action-menu {
+       position: absolute;
+       top: 100%;
+       right: 0;
+       background-color: white;
+       border-radius: 0.5rem;
+       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+       width: 200px;
+       z-index: 10;
+       display: none;
+       opacity: 0;
+       transform: translateY(-10px);
+       transition: opacity 0.3s ease, transform 0.3s ease;
+   }
+
+   .action-menu.show {
+       display: block;
+       opacity: 1;
+       transform: translateY(0);
+   }
+   .menu-box{
+           margin-top:50px;
+
+   }
+   .menu-option {
+       display: flex;
+       align-items: center;
+       gap: 0.5rem;
+       padding: 0.75rem 1rem;
+       cursor: pointer;
+       transition: background-color 0.2s;
+   }
+
+   .menu-option:hover {
+       background-color: #f1f5f9;
+   }
+
+   .dropdown {
+       position: absolute;
+       top: 100%;
+       left: 0;
+       right: 0;
+       background-color: white;
+       border-radius: 0.5rem;
+       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+       margin-top: 0.5rem;
+       display: none;
+       z-index: 100;
+
+       transform: translateY(-10px);
+       transition: opacity 0.3s ease, transform 0.3s ease;
+   }
+
+   .dropdown-item {
+       padding: 0.75rem 1rem;
+       cursor: pointer;
+   }
+
+   .dropdown-item:hover {
+       background-color: #f1f5f9;
+   }
+
+   .modal {
+       display: none;
+       position: fixed;
+       top: 0;
+       left: 0;
+       right: 0;
+       bottom: 0;
+       background-color: rgba(0, 0, 0, 0.75);
+       z-index: 1000;
+       align-items: center;
+       justify-content: center;
+       animation: fadeInModal 0.5s ease;
+   }
+
+   .modal-content {
+       background-color: white;
+       border-radius: 0.5rem;
+       max-width: 90vw;
+       max-height: 90vh;
+       position: relative;
+       padding: 1rem;
+       transform: scale(0.95);
+       transition: transform 0.3s ease;
+   }
+
+   .modal-content.show {
+       transform: scale(1);
+   }
+
+   .close-btn {
+       position: absolute;
+       top: 1rem;
+       right: 1rem;
+       color: white;
+       font-size: 2rem;
+       cursor: pointer;
+       z-index: 1001;
+   }
+
+   /* File status classes */
+   .file-card.favorite .fa-star {
+       color: #eab308;
+   }
+
+   .file-card.deleted {
+       opacity: 0.7;
+   }
+   .save-button {
+       background-color: #2196F3;
+       color: white;
+       border: none;
+       padding: 0.5rem 1rem;
+       border-radius: 4px;
+       cursor: pointer;
+       display: flex;
+       align-items: center;
+       gap: 0.5rem;
+       transition: background-color 0.2s;
+       margin-right: 0.5rem;
+   }
+   .titleConta{
+       display: flex;
+       margin-bottom: 2rem;
+       align-items: center;
+       justify-content: space-between;
+   }
+   .save-button:hover {
+       background-color: #1976D2;
+   }
+
+   /* Add this to your existing CSS */
+   /* Add these new styles to your existing CSS */
+
+   .audio-player {
+       background-color: #2d2d2d;
+       padding: 2rem;
+       border-radius: 8px;
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+       gap: 1rem;
+   }
+
+   .audio-player audio {
+       width: 100%;
+       max-width: 400px;
+   }
+
+   .audio-info {
+       display: flex;
+       align-items: center;
+       gap: 0.5rem;
+       color: white;
+   }
+
+   .audio-info i {
+       font-size: 1.5rem;
+       color: #4CAF50;
+   }
+
+   .text-preview {
+       background-color: #2d2d2d;
+       padding: 2rem;
+       border-radius: 8px;
+       width: 100%;
+       height: 100%;
+       overflow: auto;
+   }
+
+   .text-preview pre {
+       color: white;
+       font-family: 'Fira Code', monospace;
+       font-size: 14px;
+       white-space: pre-wrap;
+       word-wrap: break-word;
+   }
+
+   .download-button {
+       background-color: #4CAF50;
+       color: white;
+       padding: 0.75rem 1.5rem;
+       border-radius: 4px;
+       text-decoration: none;
+       display: flex;
+       align-items: center;
+       gap: 0.5rem;
+       transition: background-color 0.2s;
+   }
+
+   .download-button:hover {
+       background-color: #45a049;
+   }
+
+   /* Update modal styles */
+   .modal-file-view {
+       display:none
+   }
+
+   /* Chatbot Styles */
+   #chatbot {
+       position: fixed;
+       bottom: 120px;
+       right: 30px;
+       width: 450px; /* Increased width */
+       height: 550px; /* Increased height */
+       background-color: transparent;
+       border-radius: 20px;
+       display: none;
+       flex-direction: column;
+       z-index: 1000;
+       transition: all 2s ease-in-out;
+   }
+
+   #chatbot.open {
+       transform: translateY(0);
+   }
+
+   .searchBa{
+        display:flex;
+        gap:1.2em;
+   }
+
+   #chatbot.closed {
+       transform: translateY(100%);
+   }
+
+   .header {
+       background-color: white;
+       color: black;
+       border-top-right-radius:20px;
+       border-top-left-radius:20px;
+       padding: 15px;
+       font-size: 18px;
+       font-weight: bold;
+       text-align: center;
+       position: relative;
+       display: flex;
+       justify-content: space-between;
+       align-items: center;
+   }
+
+   .close-btn {
+       font-size: 20px;
+       color: white;
+       cursor: pointer;
+   }
+
+   .chat-box {
+       flex: 1;
+       padding: 10px;
+       background-color: white;
+       border-bottom-left-radius: 20px;
+       border-bottom-right-radius: 20px;
+       border-top: 1px solid #444;
+       z-index:1;
+       display: flex;
+       flex-direction: column;
+       overflow-y: scroll; /* Allow scrolling */
+       height:89.2%;
+   }
+   .topchat {
+   margin-top: -20px;
+   margin-bottom: 20px;
+   background-color: white;
+   height: 500px;
+   border-radius: 20px;
+   position: relative;
+}
+
+.topchat::before {
+   content: '';
+   position: absolute;
+   top: -5px;
+   left: -5px;
+   right: -5px;
+   bottom: -5px;
+   background: linear-gradient(45deg, #ff7f50, #ff1493, #00bfff, #8a2be2);
+   border-radius: 20px;
+   z-index: -1; /* Ensures the gradient border stays behind the content */
+}
+
+   .topchat::-webkit-scrollbar {
+       width: 0px; /* Hides the scrollbar */
+       background: transparent; /* Make the background transparent */
+   }
+
+
+   /* Hide scrollbar but keep scrolling functionality */
+   .chat-box::-webkit-scrollbar {
+       width: 0px; /* Hides the scrollbar */
+       background: transparent; /* Make the background transparent */
+   }
+
+   .message {
+       display: flex;
+       align-items: flex-start;
+       margin-bottom: 15px;
+       animation: fadeIn 0.5s ease-out;
+   }
+
+   .sent {
+       justify-content: flex-end;
+   }
+
+   .received {
+       justify-content: flex-start;
+   }
+
+   .profile-img {
+       width: 40px;
+       height: 40px;
+       border-radius: 50%;
+       margin-right: 10px;
+   }
+
+   .message span {
+       max-width: 200px;
+       word-wrap: break-word;
+       background-color: #444;
+       padding: 10px;
+       border-radius: 15px;
+       color: white;
+       font-size: 14px;
+       line-height: 1.4;
+   }
+
+   .sent span {
+       background-color: #4CAF50;
+       margin-left: 10px;
+   }
+
+   .received span {
+       background-color: #555;
+       margin-right: 10px;
+   }
+
+   .searchBar {
+   display: flex;
+   padding: 10px;
+   background-color: white;
+   box-shadow: 2px 0px 19px #ff7800;
+   justify-content: space-between;
+   border-radius: 17px;
+   width: 100%;
+   margin-top: 10px;
+   position: relative;
+}
+
+.file-info{
+    display:flex;
+    flex-direction:column;
+    gap:0.7em
+}
+
+.file-size{
+    color:grey;
+    font-size:0.7em;
+}
+
+.searchBar::before {
+   content: '';
+   position: absolute;
+   top: -5px;
+   left: -5px;
+   right: -5px;
+   bottom: -5px;
+   background: linear-gradient(45deg, #ff7f50, #ff1493, #00bfff, #8a2be2);
+   border-radius: 17px;
+   z-index: -1; /* Makes sure the gradient stays behind the content */
+}
+
+
+
+   .searchBar input {
+
+       padding: 12px;
+       border: none;
+       border-radius: 8px;
+       font-size: 14px;
+       background-color: grey;
+       color: grey;
+       width:300px;
+       outline: none;
+   }
+   #stopButton{
+       padding:5px 10px;
+   }
+   .searchBar input::placeholder {
+       color: #bbb;
+   }
+
+   .send-btn img {
+       width: 22px;
+       cursor: pointer;
+       margin-left: 10px;
+   }
+
+   .send-btn {
+       display: flex;
+       justify-content: center;
+       align-items: center;
+   }
+
+   button.clear {
+       background-color: #f44336;
+       color: white;
+       border: none;
+       border-radius: 50%;
+       width: 35px;
+       height: 35px;
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       cursor: pointer;
+       transition: background-color 0.3s ease-in-out;
+       margin: 15px;
+   }
+
+   button.clear:hover {
+       background-color: #d32f2f;
+   }
+
+   button.clear i {
+       font-size: 18px;
+   }
+
+   /* Animations */
+   @keyframes fadeIn {
+       from {
+           opacity: 0;
+           transform: translateY(20px);
+       }
+       to {
+           opacity: 1;
+           transform: translateY(0);
+       }
+   }
+
+   /* Mobile responsive */
+   @media screen and (max-width: 480px) {
+       #chatbot {
+           width: 100%;
+           height: 500px;
+           bottom: 20px;
+           right: 0;
+       }
+
+       .header {
+           font-size: 16px;
+       }
+
+       .message span {
+           font-size: 13px;
+       }
+
+       .send-btn img {
+           width: 18px;
+       }
+   }
+   /* Add these styles to your existing CSS */
+   .code-playground {
+       display: flex;
+       flex-direction: column;
+       height: 90vh;
+       background-color: #1e1e1e;
+       border-radius: 8px;
+       overflow: hidden;
+   }
+
+   .playground-header {
+       padding: 1rem;
+       background-color: #2d2d2d;
+       border-bottom: 1px solid #3d3d3d;
+       display: flex;
+       justify-content: space-between;
+       align-items: center;
+       flex-shrink: 0;
+   }
+
+   .playground-container {
+       display: flex;
+       flex: 1;
+       overflow:auto;
+   }
+
+   .editor-container {
+       flex: 1;
+       overflow: hidden;
+       border-right: 1px solid #3d3d3d;
+   }
+
+   .output-container {
+       flex: 1;
+       display: flex;
+       flex-direction: column;
+       background-color: #1e1e1e;
+   }
+
+   .output-header {
+       padding: 1rem;
+       background-color: #2d2d2d;
+       border-bottom: 1px solid #3d3d3d;
+       display: flex;
+       justify-content: space-between;
+       align-items: center;
+   }
+
+   #code-output {
+       flex: 1;
+       padding: 1rem;
+       overflow-y: auto;
+       font-family: 'Fira Code', monospace;
+       white-space: pre-wrap;
+       color: #fff;
+       background-color: #1e1e1e;
+   }
+
+
+   /* Modal adjustments */
+   .modal {
+       padding: 20px;
+   }
+
+   .modal-content {
+       width: 90vw;
+       height: 90vh;
+       max-width: 1400px;
+       padding: 0;
+       overflow: hidden;
+   }
+   .voice-btn {
+           background-color: transparent;
+           border: none;
+           cursor: pointer;
+           font-size: 24px;
+           margin-right: 10px;
+           color: #555;
+       }
+       .voice-btn:hover {
+           color: #ff7d06;
+       }
+
+       #voice-microphone-icon {
+
+           color:ff7d06;
+           transition: color 0.3s;
+       }
+       .listening #voice-microphone-icon {
+           color: red;
+           animation: blink 1s infinite;
+       }
+       @keyframes blink {
+           50% {
+               opacity: 0;
+           }
+       }
+
+       .dropdown {
+           position: absolute;
+           background-color: white;
+           width: 100%;
+           box-shadow: 2px 0px 19px #ff7800;
+           max-height: 200px;
+           overflow-y: auto;
+       }
+       .dropdown::-webkit-scrollbar {
+       width: 0px; /* Hides the scrollbar */
+       background: transparent; /* Make the background transparent */
+   }
+
+
+       .dropdown-item {
+           padding: 10px;
+           cursor: pointer;
+       }
+
+       .dropdown-item:hover {
+           background-color: #f1f1f1;
+       }
+       /* Add these styles for video notes feature */
+       .video-notes-container {
+           width: 100%;
+           height: 100%;
+           display: flex;
+           flex-direction: column;
+           gap: 1rem;
+           padding: 1rem;
+           background-color: #1a1a1a;
+       }
+
+       .video-controls {
+           display: flex;
+           justify-content: flex-end;
+           padding: 0.5rem;
+       }
+
+       .generate-notes-btn {
+           background-color: #4CAF50;
+           color: white;
+           border: none;
+           padding: 0.75rem 1.5rem;
+           border-radius: 4px;
+           cursor: pointer;
+           display: flex;
+           align-items: center;
+           gap: 0.5rem;
+           font-size: 1rem;
+           transition: background-color 0.2s;
+       }
+
+       .generate-notes-btn:hover {
+           background-color: #45a049;
+       }
+
+       .generate-notes-btn:disabled {
+           background-color: #666;
+           cursor: not-allowed;
+       }
+
+       .content-container {
+           display: flex;
+           gap: 1rem;
+           height: calc(100% - 3rem);
+       }
+
+       .video-container {
+           flex: 1;
+           min-width: 0;
+       }
+
+       .modal-video {
+           width: 100%;
+           height: 100%;
+           border-radius: 8px;
+           background-color: black;
+       }
+
+       .notes-container {
+           flex: 1;
+           min-width: 300px;
+           max-width: 500px;
+           background-color: #2d2d2d;
+           border-radius: 8px;
+           display: flex;
+           flex-direction: column;
+           overflow: hidden;
+       }
+
+       .notes-header {
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           padding: 1rem;
+           background-color: #333;
+           border-bottom: 1px solid #444;
+       }
+
+       .notes-header h3 {
+           color: white;
+           margin: 0;
+       }
+
+       .copy-btn {
+           background-color: #2196F3;
+           color: white;
+           border: none;
+           padding: 0.5rem 1rem;
+           border-radius: 4px;
+           cursor: pointer;
+           display: flex;
+           align-items: center;
+           gap: 0.5rem;
+           font-size: 0.9rem;
+           transition: background-color 0.2s;
+       }
+
+       .copy-btn:hover {
+           background-color: #1976D2;
+       }
+
+       .notes-content {
+           flex: 1;
+           padding: 1rem;
+           overflow-y: auto;
+           color: white;
+           font-size: 0.95rem;
+           line-height: 1.6;
+       }
+
+       .loading {
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           height: 100%;
+           color: #888;
+           font-style: italic;
+       }
+
+       .error {
+           color: #ff6b6b;
+           padding: 1rem;
+           border: 1px solid #ff6b6b;
+           border-radius: 4px;
+           margin-top: 1rem;
+       }
+
+       .notes-text {
+           white-space: pre-wrap;
+           word-break: break-word;
+       }
+       /* Add this to your existing CSS */
+       .modal {
+           display: none;
+           position: fixed;
+           top: 0;
+           left: 0;
+           right: 0;
+           bottom: 0;
+           background-color: rgba(0, 0, 0, 0.85);
+           z-index: 1000;
+           align-items: center;
+           justify-content: center;
+       }
+
+       .modal-content {
+           background-color: #1e1e1e;
+           border-radius: 8px;
+           width: 90vw;
+           height: 90vh;
+           position: relative;
+           overflow: hidden;
+       }
+
+       .close-btn {
+           position: absolute;
+           top: 15px;
+           right: 20px;
+           color: white;
+           font-size: 28px;
+           cursor: pointer;
+           z-index: 1001;
+           transition: color 0.2s;
+       }
+
+       .close-btn:hover {
+           color: #ff4444;
+       }
+
+       .modal-file-view {
+           width: 100%;
+           height: 100%;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           padding: 20px;
+       }
+
+       .modal-image {
+           max-width: 100%;
+           max-height: 100%;
+           object-fit: contain;
+       }
+
+       .modal-video {
+           max-width: 100%;
+           max-height: 100%;
+       }
+
+       .modal-iframe {
+           width: 100%;
+           height: 100%;
+           border: none;
+       }
+
+
+
+       /* Add these styles for video notes feature */
+       .video-notes-container {
+           width: 100%;
+           height: 100%;
+           display: flex;
+           flex-direction: column;
+           gap: 1rem;
+           padding: 1rem;
+           background-color: #1a1a1a;
+       }
+
+       .video-controls {
+           display: flex;
+           justify-content: flex-end;
+           padding: 0.5rem;
+       }
+
+       .generate-notes-btn {
+           background-color: #4CAF50;
+           color: white;
+           border: none;
+           padding: 0.75rem 1.5rem;
+           border-radius: 4px;
+           cursor: pointer;
+           display: flex;
+           align-items: center;
+           gap: 0.5rem;
+           font-size: 1rem;
+           transition: background-color 0.2s;
+       }
+
+       .generate-notes-btn:hover {
+           background-color: #45a049;
+       }
+
+       .generate-notes-btn:disabled {
+           background-color: #666;
+           cursor: not-allowed;
+       }
+
+       .content-container {
+           display: flex;
+           gap: 1rem;
+           height: calc(100% - 3rem);
+       }
+
+       .video-container {
+           flex: 1;
+           min-width: 0;
+       }
+
+       .modal-video {
+           width: 100%;
+           height: 100%;
+           border-radius: 8px;
+           background-color: black;
+       }
+
+       .notes-container {
+           flex: 1;
+           min-width: 300px;
+           max-width: 500px;
+           background-color: #2d2d2d;
+           border-radius: 8px;
+           display: flex;
+           flex-direction: column;
+           overflow: hidden;
+       }
+
+       .notes-header {
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           padding: 1rem;
+           background-color: #333;
+           border-bottom: 1px solid #444;
+       }
+
+       .notes-header h3 {
+           color: white;
+           margin: 0;
+       }
+
+       .copy-btn {
+           background-color: #2196F3;
+           color: white;
+           border: none;
+           padding: 0.5rem 1rem;
+           border-radius: 4px;
+           cursor: pointer;
+           display: flex;
+           align-items: center;
+           gap: 0.5rem;
+           font-size: 0.9rem;
+           transition: background-color 0.2s;
+       }
+
+       .copy-btn:hover {
+           background-color: #1976D2;
+       }
+
+       .notes-content {
+           flex: 1;
+           padding: 1rem;
+           overflow-y: auto;
+           color: white;
+           font-size: 0.95rem;
+           line-height: 1.6;
+       }
+
+       .loading {
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           height: 100%;
+           color: #888;
+           font-style: italic;
+       }
+
+       .error {
+           color: #ff6b6b;
+           padding: 1rem;
+           border: 1px solid #ff6b6b;
+           border-radius: 4px;
+           margin-top: 1rem;
+       }
+
+       .notes-text {
+           white-space: pre-wrap;
+           word-break: break-word;
+       }
+       .dropdown-item{
+           color:black;
+       }
+       .box3{
+       position:relative;
+           width:22%;
+           border:1px solid rgba(0, 0, 0, 0.1);
+           height:100vh;
+           background-color:rgb(237, 237, 237);
+
+       }
+
+   .Sendvoice{
+       width:60px;
+       display:flex;
+       align-items:center;
+       justify-content:space-between;
+   }
+
+       #preview-container {
+       overflow-y:auto;
+       display: flex;
+       flex-wrap: wrap;
+       gap: 16px;
+       padding: 20px;
+   }
+
+   /* File Card */
+   .file-card {
+       width: 200px;
+       height:200px;
+       padding: 14px;
+       background: white;
+       border-radius: 14px;
+       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+       transition: transform 0.3s ease, box-shadow 0.3s ease;
+       text-align: center;
+       cursor: pointer;
+   }
+
+
+    /* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+.file-info {
+    display: flex;
+    flex-direction: column; /* Vertical layout */
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 400px;
+    width: 100%;
+    margin: 10px auto 0 auto;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    overflow-x:auto;
+    overflow-y:hidden
+}
+.file-info::-webkit-scrollbar {
+       width: 0px; /* Hides the scrollbar */
+       background: transparent; /* Make the background transparent */
+   }
+
+.file-info:hover {
+    transform: translateY(-5px);
+}
+
+/* Thumbnail Style */
+.file-info .thumbnail {
+    /* border: 1px solid red; */
+    margin-bottom: 15px;
+    animation: bounce 1s infinite alternate;
+}
+
+.file-info .thumbnail img {
+    width: 100%;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+/* File Info Details */
+.file-info .file-details {
+    font-size: 16px;
+    color: #333;
+}
+
+.file-info .file-details h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #2b3a42;
+    transition: color 0.3s ease;
+}
+
+.file-info .file-details h3:hover {
+    color: #007bff;
+}
+
+.file-info .file-details p {
+    margin: 8px 0;
+    line-height: 1.6;
+}
+
+/* Links and Button Styles */
+.file-info a {
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.file-info a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+.infocontainer{
+    display:flex;
+    flex-direction:column;
+    gap:1em;
+    text-align:left;
+}
+
+.file-info .download-btn {
+    padding: 12px 25px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #494a4b;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    display: inline-block;
+}
+
+.file-info .download-btn:hover {
+    background-color: #232323;
+    transform: translateY(-2px);
+}
+
+.file-info .download-btn:active {
+    transform: translateY(1px);
+}
+
+/* Animation for bounce effect */
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Responsive Styles for Portrait Mode */
+@media (max-width: 600px) {
+    .file-info {
+        padding: 15px;
+        max-width: 100%;
+        margin: 15px;
+    }
+
+    .file-info .thumbnail img {
+        width: 70px;
+        height: 70px;
+    }
+
+    .file-info .file-details h3 {
+        font-size: 16px;
+    }
+
+    .file-info .file-details p {
+        font-size: 14px;
+    }
+
+    .file-info .download-btn {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+}
+
+
+   .file-card:hover {
+       transform: scale(1.05);
+       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+   }
+
+
+   /* Modal Styles */
+#initialfetch-fileModal {
+
+   display: none; /* Hidden by default */
+   position: fixed;
+   z-index: 1; /* Sit on top */
+   left: 0;
+   top: 0;
+   width: 100%;
+   height: 100%;
+   overflow: hidden;
+   background-color: rgba(0, 0, 0, 0.4); /* Black with transparency */
+   backdrop-filter:blur(8px);
+}
+
+#initialfetch-modalContent {
+   background-color: #fefefe;
+   margin: 0 auto;
+   padding: 20px;
+   border: 1px solid #888;
+   height:90%;
+   width: 90%;
+   max-width: 800px;
+}
+
+#initialfetch-closeModal {
+   color: #aaa;
+   float: right;
+   font-size: 28px;
+   font-weight: bold;
+}
+
+#initialfetch-closeModal:hover,
+#initialfetch-closeModal:focus {
+   color: black;
+   text-decoration: none;
+   cursor: pointer;
+}
+   #initialfetch-modalBody iframe{
+       height:800px;
+   }
+
+/* Main container for the file information */
+
+
+   .file-icon{
+        width:60px;
+        height:60px;
+   }
+   .file-link{
+    border: 1px solid #1a1a1a;
+    width: fit-content;
+    height: fit-content;
+    padding:12px 25px ;
+    border-radius: 5px;
+    color: #1a1a1a;
+   }
+   .buttonz{
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    padding-top: 20px;
+   }
+    .bot{
+        border-radius: 50%;
+        display:flex;
+        align-items:center;
+        background-color:#1a1a1a;
+        box-shadow:0px 1px 15px #1a1a1a;
+        width:fit-content;
+        position:absolute;
+        right:20px;
+        bottom:20px;
+        padding:16px
+    }
+    .profile{
+        width:90%;
+        justify-content:space-between;
+    }
+
+</style>
+<body>
+<div class="container">
+    <aside class="sidebar">
+        <div class="logo">
+            <!--            <img src="https://cdn-icons-png.flaticon.com/512/8860/8860019.png" alt="Logo">-->
+            <h1>Drox</h1>
+        </div>
+
+        <nav class="menu-box">
+            <div class="menu active" data-category="home">
+                <i class="fa-regular fa-hard-drive" style="color: #ffffff;"></i>
+                <p class="menuHead">Cloud</p>
+            </div>
+            <div class="menu" data-category="videos">
+                <i class="fa-solid fa-film" style="color: #ffffff;"></i>
+                <p class="menuHead">Videos</p>
+            </div>
+            <div class="menu" data-category="images">
+                <i class="fa-regular fa-images" style="color: #ffffff;"></i>
+                <p class="menuHead">Images</p>
+            </div>
+            <div class="menu" data-category="pdf">
+                <i class="fa-regular fa-file-pdf" style="color: #ffffff;"></i>
+                <p class="menuHead">PDF</p>
+            </div>
+            <div class="menu" data-category="favorites">
+                <i class="fa-regular fa-star" style="color: #ffffff;"></i>
+                <p class="menuHead">Favorites</p>
+            </div>
+
+            <div class="menu" data-category="trash">
+                <i class="fa-regular fa-trash-can" style="color: #ffffff;"></i>
+                <p class="menuHead">Trash</p>
+            </div>
+        </nav>
+        <br>
+        <br>
+        <br>
+
+
+    </aside>
+
+    <main class="box2">
+        <!-- Modal for file preview -->
+        <div id="modal" class="modal">
+            <span class="close-btn">&times;</span>
+            <div id="modal-content" class="modal-content"></div>
+        </div>
+
+        <div class="nav">
+            <div class="searchBa">
+                <div class="searchNav">
+                    <img src="https://static-00.iconduck.com/assets.00/search-icon-2048x2048-cmujl7en.png" width="5%" class="search">
+                    <input type="text" placeholder="Search your file....." class="inputBox" id="searchInput">
+                    <button type="submit" id="searchButton" style="display:none;">search</button>
+                    <div id="dropdown" class="dropdown" style="color:black;border:1px solid red;"></div>
+                </div>
+                <button id="voice-btn" class="voice-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#402002" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mic"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>                </button>
+            </div>
+
+        </div>
+
+        <div class="content">
+            <div class="titleConta">
+                <h2 id="category-title">All Files</h2>
+
+                <!-- Modal Structure -->
+                <!-- Modal structure -->
+                <!--<div id="initialfetch-fileModal" class="modal" style="display:none;">
+                    <div id="initialfetch-modalContent" class="modal-content">
+                        <span id="initialfetch-closeModal" class="close">&times;</span>
+                        <div id="initialfetch-modalBody">
+                             File content (iframe) will be inserted here 
+                        </div>
+                    </div>
+                </div>-->
+
+
+                <!-- Link to open file in a modal -->
+
+
+                <form id="upload-form" enctype="multipart/form-data">
+                    <label for="file-input" class="upload-btn">
+                        <span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-upload"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                            Upload
+                          </span>
+                    </label>
+                    <input type="file" id="file-input" multiple>
+                </form>
+
+            </div>
+            <div class="files-grid" id="preview-container"></div>
+        </div>
+    </main>
+    <section class="box3">
+        <div class="profile" style="position:absolute;right:20px;top:30px;">
+            <div class="" data-category="code">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#212121" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code-xml"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg>
+                <!--                    <p class="menuHead">Code</p>-->
+            </div>
+
+
+            <img src="https://i.pinimg.com/236x/68/31/12/68311248ba2f6e0ba94ff6da62eac9f6.jpg" width="30%" class="user">
+
+        </div>
+        <h1 class="preview-header" style="text-align:center;margin:130px 20px 20px 20px;">File Preview</h1>
+        <div id="metadata-display" class="file-info-card"></div>
+        <div class="bot">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bot-message-square"><path d="M12 6V2H8"/><path d="m8 18-4 4V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2Z"/><path d="M2 12h2"/><path d="M9 11v2"/><path d="M15 11v2"/><path d="M20 12h2"/></svg>
+        </div>
+    </section>
+</div>
+
+
+<div id="chatbot" class="chatbot-container" style="display: none;">
+    <div class="topchat">
+        <div class="header">
+            Zendrive Help
+            <span class="close-btn" id="closeBtn" style="color:black">&times;</span>
+        </div>
+        <div class="chat-box" id="chatBox"></div>
+    </div>
+    <div class="searchBar">
+        <!-- Add a Stop button -->
+        <button id="stopButton">Stop</button>
+        <input type="text" id="inputText"  placeholder="Type a message..." />
+        <div class="Sendvoice">
+            <span class="send-btn" id="sendButton">
+                <i class="fas fa-paper-plane"></i>
+            </span>
+            <span class="voice-btn" id="voiceButton">
+                <i class="fas fa-microphone"></i>
+            </span>
+        </div>
+    </div>
+</div>
+
+
+
+ <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // State management
+    let files = [];
+    let currentCategory = 'home';
+    let editor = null;
+    let uploadedFiles = new Map();
+
+    // File type categories
+    const fileCategories = {
+        javascript: ['.js', '.jsx', '.ts', '.tsx'],
+        html: ['.html', '.htm'],
+        css: ['.css', '.scss', '.sass'],
+        python: ['.py'],
+        java: ['.java'],
+        cpp: ['.cpp', '.hpp'],
+        c: ['.c', '.h'],
+        csharp: ['.cs']
+    };
+
+    // DOM Elements
+    const fileUpload = document.getElementById('file-input');
+        fetchFiles();
+
+    const filesGrid = document.getElementById('preview-container');
+    const categoryTitle = document.getElementById('category-title');
+    const modal = document.getElementById('modal');
+    const modalContent = document.getElementById('modal-content');
+    const closeBtn = document.querySelector('.close-btn');
+    const searchInput = document.getElementById('searchInput');
+    const menuItems = document.querySelectorAll('.menu');
+
+    // Close modal when clicking close button or outside
+    closeBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+        modalContent.innerHTML = '';
+    });
+
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+            modalContent.innerHTML = '';
+        }
+    });
+
+    // Category handling
+    menuItems.forEach(item => {
+        item.addEventListener('click', function() {
+            menuItems.forEach(i => i.classList.remove('active'));
+            this.classList.add('active');
+            currentCategory = this.dataset.category;
+            categoryTitle.textContent = currentCategory === 'home' ? 'All Files' : currentCategory;
+
+            if (currentCategory === 'code') {
+                displayCodeFiles();
+            } else {
+                filesGrid.style.display = 'grid';
+                const codeContainer = document.getElementById('code-files-container');
+                if (codeContainer) {
+                    codeContainer.style.display = 'none';
+                }
+                filterFiles();
+            }
+        });
+    });
+
+    // File upload handling
+    fileUpload.addEventListener('change', function(event){
+        console.log("hi");
+        handleFileUpload(event);
+    });
+
+    function handleFileUpload(event) {
+        console.log("hello");
+        const formData = new FormData();
+        const files = event.target.files;
+
+        for (let file of files) {
+            formData.append('file', file); // This correctly appends each file
+
+            // Handle file types and categorization (optional part)
+            const extension = '.' + file.name.split('.').pop().toLowerCase();
+            let fileType = null;
+
+            for (const [type, extensions] of Object.entries(fileCategories)) {
+                if (extensions.includes(extension)) {
+                    fileType = type;
+                    break;
+                }
+            }
+
+            if (fileType) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedFiles.set(file.name, {
+                        name: file.name,
+                        content: e.target.result,
+                        type: fileType
+                    });
+                    if (currentCategory === 'code') {
+                        displayCodeFiles();
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        // Send to upload servlet with multiple files
+        fetch('/WorkdrivePlusPlus/upload', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Files uploaded successfully");
+            displayUploadedFiles(Array.from(files));
+        })
+        .catch(error => {
+            console.error('Error uploading files:', error);
+        });
+    }
+
+
+
+     // Search functionality
+    searchInput.addEventListener("input", function () {
+    const query = this.value.trim();
+    const dropdown = document.getElementById("dropdown");
+
+    if (query.length === 0) {
+        dropdown.style.display = 'none';
+        return;
+    }
+
+    fetch("/WorkdrivePlusPlus/search", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: "searchQuery=" + encodeURIComponent(query)
+    })
+    .then(response => response.json())
+    .then(data => {
+        dropdown.innerHTML = '';
+
+        if (data.results && data.results.length > 0) {
+            data.results.forEach(result => {
+                const div = document.createElement("div");
+                div.classList.add("dropdown-item");
+
+                // Create the filename element
+                const filename = document.createElement("span");
+                filename.classList.add("filename");
+                filename.textContent = result.video_name;
+
+                // Create the timestamp element (start_time)
+                const startTime = document.createElement("span");
+                startTime.classList.add("start-time");
+                startTime.textContent = formatTime(result.start_time); // Convert start_time to a readable format
+
+                // Append filename and startTime to div
+                div.appendChild(filename);
+                div.appendChild(startTime);
+
+                // Adding style to display them side by side
+                div.style.display = 'flex';
+                div.style.justifyContent = 'space-between';
+                div.style.alignItems = 'center';
+
+                div.onclick = function () {
+                    openModalWithIframe(result.video_link);
+                };
+
+                dropdown.appendChild(div);
+            });
+            dropdown.style.display = 'block';
+        } else {
+            dropdown.style.display = 'none';
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching search results:', error);
+    });
+});
+
+// Helper function to format the start_time into a more readable format (e.g., mm:ss)
+function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${minutes}:${secs.toString().padStart(2, '0')}`;
+}
+
+    const modalBody = document.getElementById('modal-content');
+    window.openModalWithIframe = function(videoUrl) {
+        modalBody.innerHTML = `
+            <div class="modal-file-view">
+                <iframe
+                    src="${videoUrl}"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    class="modal-iframe">
+                </iframe>
+            </div>
+        `;
+        modal.style.display = 'flex';
+    };
+
+    function displayCodeFiles() {
+        filesGrid.style.display = 'none';
+        const container = document.getElementById('code-files-container') || createCodeFilesContainer();
+        container.style.display = 'grid';
+        container.innerHTML = '';
+
+        uploadedFiles.forEach(file => {
+            const fileCard = createCodeFileCard(file);
+            container.appendChild(fileCard);
+        });
+    }
+
+    function createCodeFilesContainer() {
+        const container = document.createElement('div');
+        container.id = 'code-files-container';
+        container.className = 'code-files-grid';
+        document.querySelector('.content').appendChild(container);
+        return container;
+    }
+
+    function createCodeFileCard(file) {
+        const card = document.createElement('div');
+        card.className = 'code-file-card';
+
+        const icon = getFileIcon(file.type);
+
+        card.innerHTML = `
+            <div class="code-file-icon">
+                <i class="${icon}"></i>
+            </div>
+            <div class="code-file-info">
+                <h3>${file.name}</h3>
+                <p>${file.type.toUpperCase()}</p>
+            </div>
+        `;
+
+        card.addEventListener('click', () => openCodePlayground(file));
+        return card;
+    }
+
+    function getFileIcon(type) {
+        const icons = {
+            javascript: 'fab fa-js',
+            html: 'fab fa-html5',
+            css: 'fab fa-css3-alt',
+            python: 'fab fa-python',
+            java: 'fab fa-java',
+            cpp: 'fas fa-file-code',
+            c: 'fas fa-file-code',
+            csharp: 'fas fa-file-code'
+        };
+        return icons[type] || 'fas fa-file-code';
+    }
+
+    function openCodePlayground(file) {
+        modalContent.innerHTML = `
+            <div class="code-playground">
+                <div class="playground-header">
+                    <div class="file-info">
+                        <i class="${getFileIcon(file.type)}"></i>
+                        <span>${file.name}</span>
+                    </div>
+                    <div class="playground-actions">
+                        <button id="save-code" class="save-button">
+                            <i class="fas fa-save"></i> Save
+                        </button>
+                        <button id="run-code" class="run-button">
+                            <i class="fas fa-play"></i> Run
+                        </button>
+                    </div>
+                </div>
+                <div class="playground-container">
+                    <div class="editor-container">
+                        <div id="code-editor"></div>
+                    </div>
+                    <div class="output-container">
+                        <div class="output-header">
+                            <h3>Output</h3>
+                            <button id="clear-output" class="clear-button">
+                                <i class="fas fa-trash"></i> Clear
+                            </button>
+                        </div>
+                        <div id="code-output"></div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        modal.style.display = 'flex';
+        initializeCodeEditor(file);
+    }
+
+    function initializeCodeEditor(file) {
+        const modeMap = {
+            javascript: 'javascript',
+            html: 'xml',
+            css: 'css',
+            python: 'python',
+            java: 'text/x-java',
+            cpp: 'text/x-c++src',
+            c: 'text/x-csrc',
+            csharp: 'text/x-csharp'
+        };
+
+        editor = CodeMirror(document.getElementById('code-editor'), {
+            mode: modeMap[file.type] || 'javascript',
+            theme: 'monokai',
+            lineNumbers: true,
+            autoCloseBrackets: true,
+            matchBrackets: true,
+            indentUnit: 4,
+            tabSize: 4,
+            lineWrapping: true,
+            value: file.content || ''
+        });
+
+        const runButton = document.getElementById('run-code');
+        const saveButton = document.getElementById('save-code');
+        const outputDiv = document.getElementById('code-output');
+        const clearButton = document.getElementById('clear-output');
+
+        runButton.addEventListener('click', () => {
+            const code = editor.getValue();
+            outputDiv.innerHTML = '';
+
+            try {
+                if (file.type === 'javascript') {
+                    const originalLog = console.log;
+                    const logs = [];
+                    console.log = function() {
+                        logs.push(Array.from(arguments).join(' '));
+                        originalLog.apply(console, arguments);
+                    };
+                    const result = eval(code);
+                    console.log = originalLog;
+
+                    if (logs.length > 0) {
+                        outputDiv.innerHTML += logs.join('\n') + '\n';
+                    }
+                    if (result !== undefined) {
+                        outputDiv.innerHTML += '=> ' + result;
+                    }
+                } else if (file.type === 'html') {
+                    outputDiv.innerHTML = code;
+                } else if (file.type === 'css') {
+                    const style = document.createElement('style');
+                    style.textContent = code;
+                    outputDiv.innerHTML = '';
+                    outputDiv.appendChild(style);
+                    outputDiv.innerHTML += '<div class="css-preview">CSS Preview Area</div>';
+                } else {
+                    outputDiv.innerHTML = `Code execution for ${file.type} is not supported in the browser.\nConsider using a backend service for compilation and execution.`;
+                }
+            } catch (error) {
+                outputDiv.innerHTML = `Error: ${error.message}`;
+            }
+        });
+
+        saveButton.addEventListener('click', () => {
+            const newContent = editor.getValue();
+            const blob = new Blob([newContent], { type: 'text/plain' });
+            const newFile = new File([blob], file.name, { type: 'text/plain' });
+            const formData = new FormData();
+            formData.append('file', newFile);
+
+            fetch('/WorkdrivePlusPlus/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                outputDiv.innerHTML = 'File saved successfully!';
+                uploadedFiles.set(file.name, {
+                    ...file,
+                    content: newContent
+                });
+            })
+            .catch(error => {
+                outputDiv.innerHTML = `Error saving file: ${error.message}`;
+            });
+        });
+
+        clearButton.addEventListener('click', () => {
+            outputDiv.innerHTML = '';
+        });
+    }
+
+    function displayUploadedFiles(files) {
+        if (!files || files.length === 0) {
+            const noFilesMessage = document.createElement('div');
+            noFilesMessage.textContent = 'No files uploaded yet.';
+            filesGrid.appendChild(noFilesMessage);
+            return;
+        }
+
+        for (let file of files) {
+            const fileCard = createFileCard(file);
+            filesGrid.appendChild(fileCard);
+        }
+    }
+
+
+    function createFileCard(file) {
+
+    const fileCard = document.createElement('div');
+    fileCard.className = 'file-card';
+    fileCard.setAttribute('data-name', file.name);
+
+    const preview = document.createElement('div');
+    preview.className = 'file-preview';
+
+    if (file.type.startsWith('image/')) {
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(file);  // Replace with actual image preview URL
+        img.className = 'thumbnail';
+        preview.appendChild(img);
+    } else if (file.type.startsWith('video/')) {
+        const video = document.createElement('video');
+        video.src = 'URL.createObjectURL(file)';  // Replace with actual video preview URL
+        video.className = 'thumbnail';
+        video.muted = true;
+        video.playsInline = true;
+        video.loop = true;
+        video.autoplay = true;
+        preview.appendChild(video);
+    } else {
+        const icon = document.createElement('img');
+        icon.className = 'file-icon';
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+            if (['jpg', 'jpeg', 'png', 'gif'].includes(fileExtension)) {
+                icon.src = 'https://images.vexels.com/media/users/3/144131/isolated/preview/29576a7e0442960346703d3ecd6bac04-picture-doodle-icon.png';  // Placeholder for image icons
+            } else if (['pdf', 'txt', 'rtf', 'docx'].includes(fileExtension)) {
+                icon.src = 'https://images.freeimages.com/fic/images/icons/1580/devine_icons_part_2/512/defult_doc.png';  // Default icon for other file types
+            }else if (['py', 'java', 'html', 'css','js'].includes(fileExtension)) {
+                icon.src = 'https://uxwing.com/wp-content/themes/uxwing/download/web-app-development/div-coding-icon.png';  // Default icon for other file types
+            }
+            else{
+                icon.src='https://cdn-icons-png.flaticon.com/512/6811/6811255.png';
+            }  // Replace with the appropriate icon URL
+        preview.appendChild(icon);
+    }
+
+    fileCard.appendChild(preview);
+
+    const fileInfo = document.createElement('div');
+    fileInfo.className = 'file-info';
+
+    const fileName = document.createElement('p');
+    fileName.className = 'file-name';
+    fileName.textContent = file.name;
+
+    const fileSize = document.createElement('p');
+    fileSize.className = 'file-size';
+    fileSize.textContent = formatFileSize(file.size);
+
+    fileInfo.appendChild(fileName);
+    fileInfo.appendChild(fileSize);
+    fileCard.appendChild(fileInfo);
+
+    fileCard.addEventListener('click', function(event) {
+        updatePreviewBar(event);
+    });
+
+    return fileCard;
+}
+
+
+    function formatFileSize(bytes) {
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+        if (bytes === 0) return '0 Byte';
+        const i = Math.floor(Math.log(bytes) / Math.log(1024));
+        return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
+    }
+    function fetchFiles() {
+        fileUpload.click();
+        fetch('/WorkdrivePlusPlus/upload', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => displayUploadedFiles(data))
+        .catch(error => console.error('Error fetching files:', error));
+    }
+
+
+
+
+    function isCodeFile(fileName) {
+        const codeExtensions = ['.html', '.css', '.js', '.java', '.py', '.cpp', '.php'];  // Add more code file extensions here
+        return codeExtensions.some(ext => fileName.endsWith(ext));
+    }
+
+    function updatePreviewBar(event) {
+        let fileCard = event.target.closest('.file-card');  // Ensure you get the correct parent element
+        console.log('Event target:', event.target);
+
+        if (!fileCard) {
+            console.error("Error: No file card found");
+            return;
+        }
+
+        let fileClicked = fileCard.getAttribute('data-name');
+        console.log('File clicked:', fileClicked);
+
+        // Send a POST request to the servlet with the file name
+        fetch('/WorkdrivePlusPlus/fetchMetadata', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ fileName: fileClicked })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Received metadata:', data);
+
+            const fileAttributes = data.attributes;
+            const fileId = data.id;
+            const fileName = fileAttributes.name;
+            const fileSize = fileAttributes.storage_info.size;
+            const fileExtension = fileAttributes.extn;
+            const fileCreator = fileAttributes.created_by;
+            const fileModifiedTime = fileAttributes.modified_time;
+            const fileDownloadUrl = fileAttributes.download_url;
+            const filePermalink = fileAttributes.permalink;
+
+            // Send a POST request to the backend to get the image if it's an image file
+            if (fileExtension === "jpg" || fileExtension === "png" || fileExtension === "jpeg" || fileExtension === "gif") {
+                fetch('/WorkdrivePlusPlus/ThumbnailServlet', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        fileID: fileId
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.blob();  // Return the image as a Blob if the request was successful
+                    } else {
+                        throw new Error(`Failed to fetch thumbnail image. Status: ${response.status}`);
+                    }
+                })
+                .then(imageBlob => {
+                    // Create a URL for the image Blob to be used as the source for the img tag
+                    const imageUrl = URL.createObjectURL(imageBlob);
+
+                    // Display the metadata along with the thumbnail image
+                    const metadataContainer = document.getElementById('metadata-display');
+                    metadataContainer.innerHTML = `
+                        <div class="file-info-card">
+                            <div class="file-info">
+                                <div class="thumbnail">
+                                    <img src="${imageUrl}" alt="Thumbnail">  <!-- Dynamic image from Blob -->
+                                <!--</div>
+                                <div class="infocontainer">
+                                    <h3>${fileName}</h3>
+                                    <p><strong>File Size:</strong> ${fileSize}</p>
+                                    <p><strong>File Extension:</strong> ${fileExtension}</p>
+                                    <p><strong>Created By:</strong> ${fileCreator}</p>
+                                    <p><strong>Last Modified:</strong> ${fileModifiedTime}</p>
+                                    <p><strong>Download URL:</strong> <a href="${fileDownloadUrl}" target="_blank">Download</a></p>
+                                    <div class="buttonz">
+                                        <a href="#" class="file-link" id="initialfetch-fileLink" data-file-url="${filePermalink}">View File</a>
+                                        <button class="download-btn" onclick="window.open('${fileDownloadUrl}', '_blank')">Download</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                })
+                .catch(error => {
+                    console.error('Error fetching thumbnail:', error);
+                    const metadataContainer = document.getElementById('metadata-display');
+                    metadataContainer.innerHTML = `<p>Error fetching the thumbnail image. Please try again later.</p>`;
+                });
+            } else {
+                // Display metadata even if it's not an image file
+                const metadataContainer = document.getElementById('metadata-display');
+                metadataContainer.innerHTML = `
+                    <div class="file-info-card">
+                        <div class="file-info">
+                            <div class="thumbnail">
+                                <img src="${getFileIconUrl(fileExtension)}" alt="File Icon">  <!-- Static icon for non-image files -->
+                            <!--</div>
+                            <div>
+                                <h1>Metadata for ${fileName}</h1>
+                                <p><strong>File Name:</strong> ${fileName}</p>
+                                <p><strong>File Size:</strong> ${fileSize}</p>
+                                <p><strong>File Extension:</strong> ${fileExtension}</p>
+                                <p><strong>Last Modified:</strong> ${fileModifiedTime}</p>
+                                <p><strong>Download URL:</strong> <a href="${fileDownloadUrl}" target="_blank">Download</a></p>
+                                <div class="buttonz">
+                                    <a href="#" class="file-link" id="initialfetch-fileLink" data-file-url="${filePermalink}">View File</a>
+                                    <button class="download-btn" onclick="window.open('${fileDownloadUrl}', '_blank')">Download</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>-->
+                <!-- `;
+            }
+        }).then(somr => {
+    setTimeout(function() {
+        // Event listener for the link to open the modal
+        document.getElementById('initialfetch-fileLink').addEventListener('click', function(event) {
+            console.log("inEventListener");
+            event.preventDefault(); // Prevent default link behavior (navigation)
+
+            // Get the file URL from the data-file-url attribute
+            var fileUrl = this.getAttribute('data-file-url');
+
+            // Get the modal and modal body (make sure the modal exists in the DOM)
+            var modal = document.getElementById('initialfetch-fileModal');
+            var modalBody = document.getElementById('initialfetch-modalBody');
+
+            // Set the modal content to show the file (e.g., an iframe or a link)
+            modalBody.innerHTML = `<iframe src="${fileUrl}" width="100%" height="400px"></iframe>`;
+
+            // Show the modal
+            modal.style.display = "block";
+        });
+    }, 1000); // Delay of 3000ms (3 seconds)
+}) 
+        .catch(error => {
+            console.error('Error fetching metadata:', error);
+        });
+    }
+
+
+
+    // Event listener for closing the modal (on the close button)
+    document.getElementById('initialfetch-closeModal').addEventListener('click', function() {
+        var modal = document.getElementById('initialfetch-fileModal');
+        modal.style.display = "none";
+    });
+
+    // Close the modal if the user clicks outside the modal content
+    window.addEventListener('click', function(event) {
+        var modal = document.getElementById('initialfetch-fileModal');
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+
+
+    function getFileIconUrl(fileExtension) {
+        const icons = {
+            'pdf': 'https://www.iconpacks.net/icons/2/free-pdf-download-icon-2617-thumb.png',
+            'html': 'https://cdn.iconscout.com/icon/free/png-256/free-code-document-icon-download-in-svg-png-gif-file-formats--programming-program-web-design-pack-development-icons-1145101.png',
+            'css': 'https://cdn.iconscout.com/icon/free/png-256/free-code-document-icon-download-in-svg-png-gif-file-formats--programming-program-web-design-pack-development-icons-1145101.png',
+            'js': 'https://cdn.iconscout.com/icon/free/png-256/free-code-document-icon-download-in-svg-png-gif-file-formats--programming-program-web-design-pack-development-icons-1145101.png',
+            'java': 'https://cdn.iconscout.com/icon/free/png-256/free-code-document-icon-download-in-svg-png-gif-file-formats--programming-program-web-design-pack-development-icons-1145101.png',
+            'py': 'https://cdn.iconscout.com/icon/free/png-256/free-code-document-icon-download-in-svg-png-gif-file-formats--programming-program-web-design-pack-development-icons-1145101.png',
+            'mp3': 'https://cdn-icons-png.flaticon.com/512/2402/2402463.png',  // Audio icon
+            'mp4': 'https://cdn-icons-png.flaticon.com/512/4404/4404094.png'   // Video icon
+        };
+
+        return icons[fileExtension] || 'https://cdn.icons-png.flaticon.com/512/4404/4404094.png';  // Default to file icon
+    }
+
+    // Update the openFilePreview function for video files
+    function openFilePreview(file) {
+        modalContent.innerHTML = '';
+
+        if (file.type.startsWith('image/')) {
+            modalContent.innerHTML = `
+                <img src="${URL.createObjectURL(file)}" alt="Preview" class="modal-image">
+            `;
+        } else if (file.type.startsWith('video/')) {
+            modalContent.innerHTML = `
+                <div class="video-notes-container">
+                    <div class="video-controls">
+                        <button class="generate-notes-btn" onclick="generateVideoNotes('${URL.createObjectURL(file)}')">
+                            <i class="fas fa-file-alt"></i> Generate Notes
+                        </button>
+                    </div>
+                    <div class="content-container">
+                        <div class="video-container">
+                            <video src="${URL.createObjectURL(file)}" controls class="modal-video" autoplay></video>
+                        </div>
+                        <div class="notes-container">
+                            <div class="notes-header">
+                                <h3>Generated Notes</h3>
+                                <button class="copy-btn" onclick="copyNotes()">
+                                    <i class="fas fa-copy"></i> Copy
+                                </button>
+                            </div>
+                            <div class="notes-content"></div>
+                        </div>
+                    </div>
+                </div>`;
+        } else if (file.type.startsWith('audio/')) {
+            modalContent.innerHTML = `
+                <div class="audio-player">
+                    <audio src="${URL.createObjectURL(file)}" controls></audio>
+                    <div class="audio-info">
+                        <i class="fas fa-music"></i>
+                        <span>${file.name}</span>
+                    </div>
+                </div>`;
+        } else if (file.type === 'application/pdf') {
+            modalContent.innerHTML = `
+                <iframe src="${URL.createObjectURL(file)}" class="modal-iframe"></iframe>`;
+        } else if (file.type.startsWith('text/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                modalContent.innerHTML = `
+                    <div class="text-preview">
+                        <pre>${e.target.result}</pre>
+                    </div>`;
+            };
+            reader.readAsText(file);
+        } else {
+            modalContent.innerHTML = `
+                <div class="file-preview-fallback">
+                    ${getFileTypeIcon(file.type)}
+                    <p>${file.name}</p>
+                    <a href="${URL.createObjectURL(file)}" download="${file.name}" class="download-button">
+                        <i class="fas fa-download"></i> Download
+                    </a>
+                </div>`;
+        }
+
+        modal.style.display = 'flex';
+    }
+
+    // Update the generateVideoNotes function
+    window.generateVideoNotes = function(videoUrl) {
+        const videoContainer = document.querySelector('.video-container');
+        const notesContainer = document.querySelector('.notes-container');
+        const notesContent = document.querySelector('.notes-content');
+        const generateBtn = document.querySelector('.generate-notes-btn');
+
+        // Add the with-notes class to video container for smooth transition
+        videoContainer.classList.add('with-notes');
+
+        // Show notes container
+        notesContainer.classList.add('show');
+
+        // Disable the button and show the loading state
+        generateBtn.disabled = true;
+        generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+        notesContent.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Analyzing video and generating notes...</div>';
+
+        // Send request to server to generate notes
+        fetch('/WorkdrivePlusPlus/generateNotes', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ videoUrl: videoUrl })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Check if notes key exists in response
+            if (data.notes) {
+                notesContent.innerHTML = `<div class="notes-text">${data.notes}</div>`;
+            } else {
+                throw new Error("No notes returned from the server");
+            }
+            generateBtn.innerHTML = '<i class="fas fa-file-alt"></i> Regenerate Notes';
+            generateBtn.disabled = false;
+        })
+        .catch(error => {
+            notesContent.innerHTML = `<div class="error">
+                <i class="fas fa-exclamation-circle"></i>
+                Error generating notes: ${error.message || 'Unknown error'}
+            </div>`;
+            generateBtn.innerHTML = '<i class="fas fa-file-alt"></i> Retry';
+            generateBtn.disabled = false;
+        });
+    };
+
+
+    function getFileTypeIcon(type) {
+        const iconMap = {
+            'application/pdf': '<i class="fas fa-file-pdf"></i>',
+            'application/msword': '<i class="fas fa-file-word"></i>',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document': '<i class="fas fa-file-word"></i>',
+            'application/vnd.ms-excel': '<i class="fas fa-file-excel"></i>',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': '<i class="fas fa-file-excel"></i>',
+            'application/vnd.ms-powerpoint': '<i class="fas fa-file-powerpoint"></i>',
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation': '<i class="fas fa-file-powerpoint"></i>',
+            'text/plain': '<i class="fas fa-file-alt"></i>',
+            'audio/': '<i class="fas fa-file-audio"></i>',
+            'application/json': '<i class="fas fa-file-code"></i>',
+            'text/html': '<i class="fas fa-file-code"></i>',
+            'text/css': '<i class="fas fa-file-code"></i>',
+            'text/javascript': '<i class="fas fa-file-code"></i>',
+        };
+
+        // Check for exact matches
+        if (iconMap[type]) {
+            return iconMap[type];
+        }
+
+        // Check for partial matches (e.g., audio/*)
+        for (const [key, icon] of Object.entries(iconMap)) {
+            if (type.startsWith(key)) {
+                return icon;
+            }
+        }
+
+        // Default icon
+        return '<i class="fas fa-file"></i>';
+    }
+
+    // Make functions globally available
+    window.toggleMenu = function(button) {
+        const menu = button.nextElementSibling;
+        document.querySelectorAll('.action-menu').forEach(m => {
+            if (m !== menu) m.classList.remove('show');
+        });
+        menu.classList.toggle('show');
+    };
+
+    window.toggleFavorite = function(element) {
+        const fileCard = element.closest('.file-card');
+        fileCard.classList.toggle('favorite');
+        element.innerHTML = fileCard.classList.contains('favorite')
+            ? '<i class="fas fa-star" style="color: #eab308;"></i>Remove from favorites'
+            : '<i class="fas fa-star"></i>Add to favorites';
+    };
+
+    window.moveToTrash = function(element) {
+        const fileCard = element.closest('.file-card');
+        fileCard.classList.add('deleted');
+        if (currentCategory !== 'trash') {
+            fileCard.style.display = 'none';
+        }
+    };
+
+    // Filter files based on category
+    function filterFiles() {
+        const fileCards = document.querySelectorAll('.file-card');
+        fileCards.forEach(card => {
+            const isDeleted = card.classList.contains('deleted');
+            const isFavorite = card.classList.contains('favorite');
+            const hasImage = card.querySelector('img.thumbnail') !== null;
+            const hasVideo = card.querySelector('video.thumbnail') !== null;
+            const hasPDF = card.querySelector('.fa-file-pdf') !== null;
+
+            switch (currentCategory) {
+                case 'home':
+                    card.style.display = isDeleted ? 'none' : 'flex';
+                    break;
+                case 'favorites':
+                    card.style.display = (isFavorite && !isDeleted) ? 'flex' : 'none';
+                    break;
+                case 'trash':
+                    card.style.display = isDeleted ? 'flex' : 'none';
+                    break;
+                case 'images':
+                    card.style.display = (hasImage && !isDeleted) ? 'flex' : 'none';
+                    break;
+                case 'videos':
+                    card.style.display = (hasVideo && !isDeleted) ? 'flex' : 'none';
+                    break;
+                case 'pdf':
+                    card.style.display = (hasPDF && !isDeleted) ? 'flex' : 'none';
+                    break;
+                default:
+                    card.style.display = 'flex';
+            }
+        });
+    }
+
+    // Video notes generation
+    window.generateVideoNotes = function(videoUrl) {
+        const notesContainer = document.querySelector('.notes-container');
+        const notesContent = document.querySelector('.notes-content');
+        const generateBtn = document.querySelector('.generate-notes-btn');
+
+        generateBtn.disabled = true;
+        generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+        notesContainer.style.display = 'block';
+        notesContent.innerHTML = '<div class="loading">Generating notes...</div>';
+
+        fetch('/WorkdrivePlusPlus/generate-notes', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ videoUrl: videoUrl })
+        })
+        .then(response => response.json())
+        .then(data => {
+            notesContent.innerHTML = `<div class="notes-text">${data.notes}</div>`;
+            generateBtn.innerHTML = '<i class="fas fa-file-alt"></i> Regenerate Notes';
+            generateBtn.disabled = false;
+        })
+        .catch(error => {
+            notesContent.innerHTML = `<div class="error">Error generating notes: ${error.message}</div>`;
+            generateBtn.innerHTML = '<i class="fas fa-file-alt"></i> Retry';
+            generateBtn.disabled = false;
+        });
+    };
+
+    window.copyNotes = function() {
+        const notesText = document.querySelector('.notes-text').textContent;
+        navigator.clipboard.writeText(notesText).then(() => {
+            const copyBtn = document.querySelector('.copy-btn');
+            copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+            setTimeout(() => {
+                copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+            }, 2000);
+        });
+    };
+});
+</script> 
+
+<script>
+    // Elements
+const searchInput = document.getElementById("searchInput");
+const searchButton = document.getElementById("searchButton");
+const voiceBtn = document.getElementById("voice-btn");
+const microphoneIcon = document.getElementById("voice-microphone-icon");
+const dropdown = document.getElementById("dropdown");
+
+// Initialize speech recognition
+const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+recognition.lang = 'en-US';
+recognition.interimResults = true;
+
+// Timer for debounce
+let debounceTimer;
+
+// Debounce function to delay search requests
+function debounce(func, delay) {
+    return function () {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(func, delay);
+    };
+}
+
+// Function to handle search query input and display dropdown
+function searchInputEvent() {
+    const query = searchInput.value.trim();
+
+    // Hide dropdown if the search input is empty
+    if (query.length === 0) {
+        dropdown.style.display = 'none';
+        return;
+    }
+
+    // Show dropdown (example, you can customize this to fetch suggestions)
+    dropdown.style.display = 'block';
+}
+
+// Start or stop voice recognition when microphone icon is clicked
+voiceBtn.addEventListener("click", function () {
+    console.log("Voice button clicked...");
+
+    if (microphoneIcon.classList.contains("listening")) {
+        console.log("Stopping listening...");
+        recognition.stop();
+        microphoneIcon.classList.remove("listening");
+    } else {
+        console.log("Starting listening...");
+        recognition.start();
+        microphoneIcon.classList.add("listening");
+    }
+});
+
+// Start event: Speech recognition has started
+recognition.onstart = function () {
+    console.log("Speech recognition started...");
+};
+
+// Result event: Speech input detected and text is added to search box
+recognition.onresult = function (event) {
+    const transcript = event.results[event.results.length - 1][0].transcript;
+    console.log("Recognized Speech:", transcript);
+    searchInput.value = transcript;
+
+    // As you speak, initiate search request with debounce
+    debounce(searchInputEvent, 500)(); // Delay by 500ms
+};
+
+// Error handling: If there's an error with speech recognition
+recognition.onerror = function (event) {
+    console.error("Speech recognition error:", event.error);
+    if (event.error === "not-allowed") {
+        alert("Please allow microphone access in your browser settings.");
+    }
+};
+
+// End event: When speech recognition stops
+recognition.onend = function () {
+    console.log("Speech recognition ended.");
+    const query = searchInput.value.trim();
+    if (query) {
+        searchButton.click(); // Trigger search if query exists
+    }
+};
+
+// Event listener to trigger search as you type or speak (debounced)
+searchInput.addEventListener("input", function () {
+    debounce(searchInputEvent, 500)(); // Delay by 500ms
+});
+
+// Search button click event to initiate search manually
+searchButton.addEventListener("click", function () {
+    const query = searchInput.value.trim();
+
+    if (query) {
+        console.log("Searching for:", query);
+    } else {
+        console.log("No search query provided");
+    }
+});
+
+</script>
+<script>
+    // Get elements for the chatbot and the bot button
+    const topContainer = document.querySelector('.topchat');
+    const botButton = document.querySelector('.bot');
+    const chatbot = document.getElementById('chatbot');
+    const closeBtn = document.getElementById('closeBtn');
+    const voiceButton = document.getElementById('voiceButton');
+
+    // Toggle chatbot visibility when the bot is clicked
+    botButton.addEventListener('click', function() {
+      createMenu(); // Create the menu when the bot button is clicked
+    });
+
+    function createMenu() {
+      // Create the menu container
+      const botMenu = document.createElement('div');
+      botMenu.classList.add('menuCOntainer');
+      botMenu.style.position = 'absolute';
+      botMenu.style.bottom = '110px';
+      botMenu.style.right = '20px';
+      botMenu.style.backgroundColor = '#fff';
+      botMenu.style.border = '1px solid #ccc';
+      botMenu.style.boxShadow = '0px 4px 8px rgba(0, 0, 0, 0.2)';
+      botMenu.style.padding = '20px';
+      botMenu.style.borderRadius = '10px';
+      botMenu.style.width = '200px';
+      botMenu.style.fontFamily = 'Arial, sans-serif';
+
+      // Create the header for the menu
+      const header = document.createElement('h3');
+      header.textContent = '';
+      header.style.marginBottom = '10px';
+      header.style.textAlign = 'center';
+      header.style.fontSize = '18px';
+      header.style.color = '#333';
+
+      // Create the list for the menu options
+      const menuList = document.createElement('ul');
+      menuList.style.listStyleType = 'none';
+      menuList.style.padding = '0';
+      menuList.style.margin = '0';
+
+      // Create the "Generate Image" button
+      const generateImageItem = document.createElement('li');
+      const generateImageButton = document.createElement('button');
+      generateImageButton.textContent = 'Generate Image';
+      generateImageButton.style.width = '100%';
+      generateImageButton.style.padding = '10px';
+      generateImageButton.style.backgroundColor = '#1a1a1a';
+      generateImageButton.style.color = 'white';
+      generateImageButton.style.border = 'none';
+      generateImageButton.style.cursor = 'pointer';
+      generateImageButton.style.textAlign = 'center';
+      generateImageButton.style.borderRadius = '5px';
+      generateImageButton.style.marginBottom = '10px';
+      generateImageButton.style.fontSize = '16px';
+
+      // Add event listener for "Generate Image"
+      generateImageButton.addEventListener('click', generateImage);
+
+      generateImageItem.appendChild(generateImageButton);
+
+      // Create the "Access Chatbot" button
+      const accessChatbotItem = document.createElement('li');
+      const accessChatbotButton = document.createElement('button');
+      accessChatbotButton.textContent = 'Access Chatbot';
+      accessChatbotButton.style.width = '100%';
+
+      accessChatbotButton.style.padding = '10px';
+      accessChatbotButton.style.backgroundColor = 'transparent';
+      accessChatbotButton.style.color = '#1a1a1a';
+      accessChatbotButton.style.border = '2px solid #1a1a1a';
+      accessChatbotButton.style.cursor = 'pointer';
+      accessChatbotButton.style.textAlign = 'center';
+      accessChatbotButton.style.borderRadius = '5px';
+      accessChatbotButton.style.fontSize = '16px';
+
+      // Add event listener for "Access Chatbot"
+      accessChatbotButton.addEventListener('click', displayChatbot);
+
+      accessChatbotItem.appendChild(accessChatbotButton);
+
+      // Append items to the list
+      menuList.appendChild(generateImageItem);
+      menuList.appendChild(accessChatbotItem);
+
+      // Append the header and list to the menu container
+      botMenu.appendChild(header);
+      botMenu.appendChild(menuList);
+
+      // Append the menu to the body
+      document.querySelector('.box3').appendChild(botMenu);
+    }
+
+    // Function to handle the "Generate Image" button click
+    // Function to generate the image and show the message box
+function generateImage() {
+  document.querySelector('.menuCOntainer').style.display = 'none'; // Hide menu when generating image
+
+  // Create a popup container on the bottom right
+  const popupContainer = document.createElement('div');
+  popupContainer.classList.add('popup-container');
+  popupContainer.style.position = 'fixed';
+  popupContainer.style.bottom = '20px';
+  popupContainer.style.right = '20px';
+  popupContainer.style.backgroundColor = '#fff';
+  popupContainer.style.border = '1px solid #ccc';
+  popupContainer.style.boxShadow = '0px 4px 8px rgba(0, 0, 0, 0.2)';
+  popupContainer.style.padding = '15px';
+  popupContainer.style.borderRadius = '10px';
+  popupContainer.style.width = '250px';
+  popupContainer.style.fontFamily = 'Arial, sans-serif';
+
+  // Message display area
+  const messageBox = document.createElement('div');
+  messageBox.classList.add('message-box');
+  messageBox.style.marginBottom = '10px';
+  messageBox.style.textAlign = 'center';
+  messageBox.style.color = '#333';
+  messageBox.textContent = 'Generating Image...';
+  popupContainer.appendChild(messageBox);
+
+  // Text input for user prompt
+  const textInput = document.createElement('input');
+  textInput.type = 'text';
+  textInput.placeholder = 'Type prompt here...';
+  textInput.style.width = '100%';
+  textInput.style.padding = '10px';
+  textInput.style.marginTop = '10px';
+  textInput.style.borderRadius = '5px';
+  textInput.style.border = '1px solid #ccc';
+  textInput.style.fontSize = '14px';
+  popupContainer.appendChild(textInput);
+
+  // Append popup to the body
+  document.body.appendChild(popupContainer);
+
+  // Add event listener for pressing Enter key to send prompt to servlet
+  textInput.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+      const userPrompt = textInput.value.trim();
+      if (userPrompt) {
+        generateImageRequest(userPrompt, messageBox);
+      }
+    }
+  });
+}
+
+// Send request to the servlet for image generation
+function generateImageRequest(prompt, messageBox) {
+  // Update message to "Generating..."
+  messageBox.textContent = 'Generating Image...';
+
+  // Send POST request to servlet
+  fetch('/WorkdrivePlusPlus/generateImage', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ prompt: prompt })
+  })
+  .then(response => response.json())
+  .then(data => {
+    // Handle response with image URL
+    const imageUrl = data.imageUrl;
+    messageBox.innerHTML = ''; // Clear the message box
+    showGeneratedImage(imageUrl);
+  })
+  .catch(error => {
+    console.error('Error generating image:', error);
+    messageBox.textContent = 'Error generating image.';
+  });
+}
+
+// Display the generated image in the popup
+function showGeneratedImage(imageUrl) {
+  const popupContainer = document.querySelector('.popup-container');
+
+  // Display the image in the popup
+  const imageElement = document.createElement('img');
+  imageElement.src = imageUrl;
+  imageElement.alt = 'Generated Image';
+  imageElement.style.width = '100%';
+  imageElement.style.borderRadius = '5px';
+
+  popupContainer.appendChild(imageElement);
+
+  // Add button for full-screen view
+  const fullscreenButton = document.createElement('button');
+  fullscreenButton.textContent = 'View Fullscreen';
+  fullscreenButton.style.width = '100%';
+  fullscreenButton.style.padding = '10px';
+  fullscreenButton.style.backgroundColor = '#1a1a1a';
+  fullscreenButton.style.color = 'white';
+  fullscreenButton.style.border = 'none';
+  fullscreenButton.style.cursor = 'pointer';
+  fullscreenButton.style.borderRadius = '5px';
+  fullscreenButton.style.marginTop = '10px';
+  fullscreenButton.addEventListener('click', () => openFullscreen(imageUrl));
+  popupContainer.appendChild(fullscreenButton);
+
+  // Add Upload to Drive button
+  const uploadButton = document.createElement('button');
+  uploadButton.textContent = 'Upload to Drive';
+  uploadButton.style.width = '100%';
+  uploadButton.style.padding = '10px';
+  uploadButton.style.backgroundColor = 'transparent';
+  uploadButton.style.color = '#1a1a1a';
+  uploadButton.style.border = '2px solid #1a1a1a';
+  uploadButton.style.cursor = 'pointer';
+  uploadButton.style.borderRadius = '5px';
+  uploadButton.style.marginTop = '10px';
+  uploadButton.addEventListener('click', () => handleFileUpload(imageUrl));
+  popupContainer.appendChild(uploadButton);
+}
+
+// Open the image in fullscreen
+function openFullscreen(imageUrl) {
+  const fullscreenDiv = document.createElement('div');
+  fullscreenDiv.style.position = 'fixed';
+  fullscreenDiv.style.top = '0';
+  fullscreenDiv.style.left = '0';
+  fullscreenDiv.style.width = '100%';
+  fullscreenDiv.style.height = '100%';
+  fullscreenDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+  fullscreenDiv.style.zIndex = '9999';
+  fullscreenDiv.style.display = 'flex';
+  fullscreenDiv.style.justifyContent = 'center';
+  fullscreenDiv.style.alignItems = 'center';
+
+  const fullscreenImage = document.createElement('img');
+  fullscreenImage.src = imageUrl;
+  fullscreenImage.style.maxWidth = '90%';
+  fullscreenImage.style.maxHeight = '90%';
+
+  fullscreenDiv.appendChild(fullscreenImage);
+
+  // Close the fullscreen view when clicked
+  fullscreenDiv.addEventListener('click', () => {
+    document.body.removeChild(fullscreenDiv);
+  });
+
+  document.body.appendChild(fullscreenDiv);
+}
+
+// Simulate image upload to Drive (for now, just a console log)
+// Simulate image upload to Drive (for now, just a console log)
+function handleFileUpload(imageUrl) {
+  // Fetch the image as a Blob
+  fetch(imageUrl)
+    .then(response => response.blob()) // Convert the image into a Blob
+    .then(blob => {
+      const formData = new FormData();
+      formData.append('image', blob, 'generatedImage.jpg'); // Append the Blob
+
+      // Now send the FormData to the server
+      fetch('/WorkdrivePlusPlus/upload', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => {
+        if (response.ok) {
+          console.log('Image uploaded successfully');
+        } else {
+          console.error('Failed to upload the image');
+        }
+      })
+      .catch(error => {
+        console.error('Error uploading the image:', error);
+      });
+    })
+    .catch(error => {
+      console.error('Error fetching the image:', error);
+    });
+}
+
+
+
+
+    // Function to handle the "Access Chatbot" button click
+    function displayChatbot() {
+            document.querySelector('.menuCOntainer').style.display = 'none';
+      if (chatbot.style.display === 'none' || chatbot.style.display === '') {
+        chatbot.style.display = 'flex';  // Show the chatbot
+      } else {
+        chatbot.style.display = 'none';  // Hide the chatbot
+      }
+    }
+
+    // Close chatbot when close button is clicked
+    closeBtn.addEventListener('click', function() {
+      chatbot.style.display = 'none';
+    });
+
+
+     // Chatbot sending/receiving functionality
+     const sendButton = document.getElementById("sendButton");
+     const inputText = document.getElementById("inputText");
+     const chatBox = document.getElementById("chatBox");
+
+     const profiles = {
+         sent: 'https://photoshulk.com/wp-content/uploads/best-meme-pfp-for-school.jpg',
+         received: 'https://preview.redd.it/bcyq3rjk2w071.png?auto=webp&s=97c9b873f1b41a7b9ff31331fd92f2e3fafed92f'
+     };
+
+     // Send Button functionality
+     sendButton.addEventListener("click", function() {
+         const message = inputText.value.trim();
+         if (message) {
+             const messageElement = document.createElement("div");
+             messageElement.classList.add("message", "sent");
+
+             const profileImg = document.createElement("img");
+             profileImg.src = profiles.sent;
+             profileImg.classList.add("profile-img");
+
+             const textElement = document.createElement("span");
+             textElement.textContent = message;
+
+             messageElement.appendChild(textElement);
+             messageElement.appendChild(profileImg);
+             chatBox.appendChild(messageElement);
+             chatBox.scrollTop = chatBox.scrollHeight;
+             inputText.value = "";
+
+             fetch('/WorkdrivePlusPlus/bot', {
+                 method: 'POST',
+                 headers: {'Content-Type': 'application/json'},
+                 body: JSON.stringify({ message: message })
+             })
+             .then(response => response.text())
+             .then(data => {
+                 const replyMessage = data;
+                 const replyElement = document.createElement("div");
+                 replyElement.classList.add("message", "received");
+
+                 const replyProfileImg = document.createElement("img");
+                 replyProfileImg.src = profiles.received;
+                 replyProfileImg.classList.add("profile-img");
+
+                 const replyTextElement = document.createElement("span");
+                 replyTextElement.textContent = replyMessage;
+
+                 replyElement.appendChild(replyProfileImg);
+                 replyElement.appendChild(replyTextElement);
+                 chatBox.appendChild(replyElement);
+                 chatBox.scrollTop = chatBox.scrollHeight;
+
+                 // Call Text-to-Speech function
+                 speak(replyMessage);
+             })
+             .catch(error => {
+                 console.error('Error:', error);
+                 const errorMessage = document.createElement("div");
+                 errorMessage.classList.add("message", "received");
+                 errorMessage.textContent = "Sorry, there was an error processing your request.";
+                 chatBox.appendChild(errorMessage);
+                 chatBox.scrollTop = chatBox.scrollHeight;
+             });
+         }
+     });
+
+     // Triggering send on Enter key press
+     inputText.addEventListener("keydown", function(event) {
+         if (event.key === "Enter") {
+             sendButton.click();
+         }
+     });
+
+     // Speech-to-Text functionality (for the voice button)
+     const speechRecognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+     speechRecognition.lang = 'en-US';
+     speechRecognition.continuous = false; // Stop after one result
+     speechRecognition.interimResults = false; // Don't show partial results
+
+     voiceButton.addEventListener('click', function() {
+        console.log("Listening for speech...");
+
+        // Start microphone and audio context only when the mic button is clicked
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(microphone => {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const analyser = audioContext.createAnalyser();
+                const source = audioContext.createMediaStreamSource(microphone);
+                source.connect(analyser);
+
+                analyser.fftSize = 512;  // Set FFT size for frequency analysis
+                const bufferLength = analyser.frequencyBinCount; // Number of frequency bins
+                const dataArray = new Uint8Array(bufferLength); // Array to store frequency data
+
+                // Target both the topContainer and searchBar for box-shadow effect
+                const searchBar = document.querySelector('.searchBar');  // Select .searchBar element
+                topContainer.style.transition = "all 0.1s";  // Smooth transition for box-shadow
+                searchBar.style.transition = "all 0.1s";  // Smooth transition for .searchBar's box-shadow
+
+                function updateBoxShadow() {
+                    analyser.getByteFrequencyData(dataArray); // Get frequency data
+
+                    // Find the max frequency value from the frequency bins
+                    let maxFrequency = Math.max(...dataArray);
+
+                    // Increase color intensity based on frequency
+                    let colorIntensity = Math.floor((maxFrequency / 255) * 255);  // Scale intensity from 0 to 255
+
+                    // Start with a darker color and increase the brightness as you speak
+                    let blue = Math.min(colorIntensity, 255);  // Max blue intensity at full scale
+                    let purple = Math.min(colorIntensity / 1.5, 255);  // Slight purple tint (lighter purple as intensity increases)
+
+                    // Create colors for the gradient (starting with blue and purple)
+                    let startColor = `rgba(50, 0, ${blue}, 0.3)`;  // Darker blue gradient start
+                    let endColor = `rgba(${purple}, 0, ${purple}, 0.6)`;  // Lighter purple at the end
+
+                    // Apply linear-gradient effect to the box-shadow with a shift from left to right
+                    topContainer.style.boxShadow = `0 0 5px 5px ${startColor}, 0 0 15px ${colorIntensity / 20}px ${endColor}`;
+                    searchBar.style.boxShadow = `0 0 5px 5px ${startColor}, 0 0 15px ${colorIntensity / 20}px ${endColor}`;  // Apply the same box-shadow to .searchBar
+
+                    // Log maxFrequency and color values for debugging purposes
+                    console.log("Max Frequency:", maxFrequency);
+                    console.log("Start Color:", startColor);
+                    console.log("End Color:", endColor);
+
+                    // Keep updating the box-shadow effect
+                    requestAnimationFrame(updateBoxShadow);
+                }
+
+                // Start updating the box-shadow dynamically based on pitch
+                updateBoxShadow();
+
+                // Start listening for speech
+                speechRecognition.start();
+            })
+            .catch(err => {
+                console.error('Error accessing the microphone:', err); // Handle errors with microphone access
+            });
+    });
+
+
+
+
+
+     // Handle speech recognition results
+     speechRecognition.onresult = function(event) {
+         const transcript = event.results[0][0].transcript;
+         console.log("Recognized text:", transcript);
+         inputText.value = transcript; // Populate the text input with recognized speech
+         sendButton.click(); // Send the message automatically after speech-to-text conversion
+     };
+
+     // Handle speech recognition errors
+     speechRecognition.onerror = function(event) {
+         console.error('Speech recognition error:', event.error);
+     };
+
+     // Handle speech recognition end
+     speechRecognition.onend = function() {
+         console.log('Speech recognition ended.');
+     };
+
+     // Function to handle Text-to-Speech
+     let currentSpeech = null;
+
+     function speak(message) {
+         if ('speechSynthesis' in window) {
+             window.speechSynthesis.cancel(); // Cancel any ongoing speech
+
+             // Create a new speech synthesis utterance
+             currentSpeech = new SpeechSynthesisUtterance(message);
+
+             // Get available voices
+             let voices = window.speechSynthesis.getVoices();
+
+             if (voices.length === 0) {
+                 window.speechSynthesis.onvoiceschanged = function() {
+                     voices = window.speechSynthesis.getVoices();
+                     setIndianVoiceAndSpeak(currentSpeech, voices, message);
+                 };
+             } else {
+                 setIndianVoiceAndSpeak(currentSpeech, voices, message);
+             }
+         } else {
+             console.error('Speech synthesis is not supported in this browser.');
+         }
+     }
+
+     function setIndianVoiceAndSpeak(speech, voices, message) {
+         console.log(voices);
+         let indianVoice = voices.find(voice => voice.name.toLowerCase().includes('US')) || voices[0];
+         speech.voice = indianVoice;
+         speech.lang = indianVoice.lang;
+         speech.pitch = 1;
+         speech.rate = 1.1;
+         speech.volume = 1;
+
+         window.speechSynthesis.speak(speech);
+
+         speech.onend = function() {
+             console.log('Speech has finished.');
+         };
+
+         speech.onerror = function(event) {
+             console.error("Error during speech synthesis:", event.error);
+         };
+     }
+
+     // Stop Button functionality
+     const stopButton = document.getElementById('stopButton');
+     stopButton.addEventListener('click', function() {
+         if (currentSpeech) {
+             window.speechSynthesis.cancel();
+             console.log("Speech stopped.");
+         }
+     });
+
+
+
+</script> 
+
+</body>
+</html>

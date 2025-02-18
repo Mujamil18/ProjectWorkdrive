@@ -5,180 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>File Manager UI</title>
     <link rel="stylesheet" href="project.css">
-
-    <!-- <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> -->
-    
-    <!--<style>
-        /* @import ('~lucide-static/font/Lucide.css'); */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            height: 100vh;
-            /* background-color: #f8f9fb; */
-            background-color: #eef3f7;
-
-        }
-        .container {
-            display: flex;
-            width: 100%;
-        }
-        .sidebar {
-
-            /* border: 1px solid blue; */
-            /* width: 100px; */
-            /* background-color: #eef3f7; */
-            background-color: #f8f9fb;
-            padding: 20px;
-        }
-        .sidebar *{
-            /* border: 1px solid black; */
-        }
-        .sidebar h2 {
-            /* border: 1px solid black; */
-            margin: 0 0 20px;
-        }
-        .sidebar nav a {
-            /* box-sizing: border-box; */
-            /* height: 80px; */
-            /* width:100%; */
-            /* border: 1px solid red; */
-            /* padding-bottom: 0; */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 15px;
-            color: #333;
-            text-decoration: none;
-            border-radius: 5px;
-            /* margin-bottom: 10px; */
-        }
-    
-        .sidebar nav a.active, .sidebar nav a:hover {
-            /* background-color: #dbe4ed; */
-        }
-        .main-content {
-            flex: 1;
-            padding: 20px;
-        }
-        .top-bar{
-            border: 1px solid black;
-            display:flex;
-            align-items: center;
-            
-        }
-        .search-bar{
-            display:flex;
-            border:1px solid black;
-            background-color: white;
-            padding: 10px;
-        }
-        .search-bar > input{
-            border: none;
-        }
-        .file-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-        .file-card {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        .file-card i {
-            font-size: 40px;
-            margin-bottom: 10px;
-        }
-        .file-preview {
-            width: 300px;
-            background: white;
-            padding: 20px;
-            border-left: 1px solid #ddd;
-        }
-        .actions button {
-            display: block;
-            width: 100%;
-            margin: 10px 0;
-            padding: 10px;
-            border: none;
-            background-color: #007bff;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .actions button:hover {
-            background-color: #0056b3;
-        }
-
-        /*search bar style*/
-        .InputContainer {
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgb(255, 255, 255);
-  border-radius: 10px;
-  overflow: hidden;
-  cursor: pointer;
-  padding-left: 15px;
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.075);
-}
-
-.input {
-  width: 170px;
-  height: 100%;
-  border: none;
-  outline: none;
-  font-size: 0.9em;
-  caret-color: rgb(255, 81, 0);
-}
-
-.labelforsearch {
-  cursor: text;
-  padding: 0px 12px;
-}
-
-.searchIcon {
-  width: 13px;
-}
-
-.border {
-  height: 40%;
-  width: 1.3px;
-  background-color: rgb(223, 223, 223);
-}
-
-.micIcon {
-  width: 12px;
-}
-
-.micButton {
-  padding: 0px 15px 0px 12px;
-  border: none;
-  background-color: transparent;
-  height: 40px;
-  cursor: pointer;
-  transition-duration: .3s;
-}
-
-.searchIcon path {
-  fill: rgb(114, 114, 114);
-}
-
-.micIcon path {
-  fill: rgb(255, 81, 0);
-}
-
-.micButton:hover {
-  background-color: rgb(255, 230, 230);
-  transition-duration: .3s;
-}
-        
-    </style>-->
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css'>
 </head>
 <body>
     <div class="container">
@@ -224,8 +51,10 @@
                         <input type="text" placeholder="Search" name="text" class="input">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
                     </div>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mic"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>                </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mic"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>                
+                </div>
               </div>
+              
             <!--<div class="top-bar">
                 <h3>Welcome, Mujamil..!</h3>
                 <div class="search-bar">
@@ -235,17 +64,65 @@
                
             </div>-->
             
-            <div class="icons">
+            <div class="files">
             <hr>
-            <div class="upload">
-            <h3>Recent Files</h3>
+            <div class="body-top">
+                <!-- <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg> -->
+                <h3>Recent Files</h3>
+                <div class="select">
+                    <div
+                      class="selected"
+                      data-default="All Files"
+                      data-one="Video"
+                      data-two="Image"
+                      data-three="Audio"
+                      data-four="Code"
+                      data-five="Pdf"
+                      data-six="Others"
+                      >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>                </div>
+                    <div class="options">
+                      <div title="all">
+                        <input id="all" name="option" type="radio" checked="" />
+                        <label class="option" for="all" data-txt="All Files"></label>
+                      </div>
+                      <div title="option-1">
+                        <input id="option-1" name="option" type="radio" />
+                        <label class="option" for="option-1" data-txt="Video"></label>
+                      </div>
+                      <div title="option-2">
+                        <input id="option-2" name="option" type="radio" />
+                        <label class="option" for="option-2" data-txt="Image"></label>
+                      </div>
+                      <div title="option-3">
+                        <input id="option-3" name="option" type="radio" />
+                        <label class="option" for="option-3" data-txt="Audio"></label>
+                      </div>
+                      <div title="option-4">
+                        <input id="option-4" name="option" type="radio" />
+                        <label class="option" for="option-4" data-txt="Code"></label>
+                      </div>
+                      <div title="option-5">
+                        <input id="option-5" name="option" type="radio" />
+                        <label class="option" for="option-5" data-txt="Pdf"></label>
+                      </div>
+                      <div title="option-6">
+                        <input id="option-6" name="option" type="radio" />
+                        <label class="option" for="option-6" data-txt="Others"></label>
+                      </div>
+                    </div>
+                  </div>
+    
             
-                <button class="button" id="upload-button">
-                    ADD FILE
-                  </button>
-            </div>
-            
-            <div class="file-grid">
+              <button>
+                <span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-upload"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                    Upload
+                  </span>
+            </button>
+
+        </div>
+            <div class="file-grid" id="file-grid-container">
                 <div class="file-card">
                     <i class="fas fa-file-pdf" style="color: red;"></i>
                     <p>Licence Agreement.pdf</p>
@@ -266,32 +143,60 @@
                     <p>Marketing Strategy.xlsx</p>
                     <span>15 MB</span>
                 </div>
+                <div class="file-card">
+                    <i class="fas fa-file-excel" style="color: green;"></i>
+                    <p>Marketing Strategy.xlsx</p>
+                    <span>15 MB</span>
+                </div>
+                <div class="file-card">
+                    <i class="fas fa-file-excel" style="color: green;"></i>
+                    <p>Marketing Strategy.xlsx</p>
+                    <span>15 MB</span>
+                </div>
             </div>
         </main>
         
         <!-- File Preview Panel -->
         <aside class="file-preview">
-            <div class="profile">
-                <img src="" alt="profile"/>
+
+            <div class="right-top-bar">
+                <div class="icons">
+                    <!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-text"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg> -->
+                    <!-- <i class="fi fi-rr-poll-h"></i> -->
+                    <i class="fi fi-rr-document"></i>
+                    <p>File Preview</p>
+                <!-- <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg> -->
+                </div>
+                
+                <div class="profile">
+                    <!-- <img src="profile.png" alt="Avatar" style="width:100%"> -->
+                </div>
+            </div>
+            
+            <hr>
+            
+            <!-- <h3>File Preview</h3> -->
+            <div class="file-preview-card">
+                <!-- <svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 24 24" fill="none" stroke="grey" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-text"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg> -->
+                <!-- <img src="file.png" alt="fileicon"> -->
+                <i class="fi fi-rr-file-pdf"></i>
+                <!-- <hr>  -->
+                <h4>Licence Agreement.pdf</h4>
             </div>
             <hr>
             
-            <h3>File Preview</h3>
-            <i class="fas fa-file-pdf" style="font-size: 50px; color: red;"></i>
-            <h4>Licence Agreement.pdf</h4>
-            <p>File Description: Important document about terms.</p>
-            <h5>Shared With:</h5>
-            <ul>
-                <li>George Williamson</li>
-                <li>Nickolas Peterson</li>
-                <li>Alexander Nikolaenko</li>
-            </ul>
+            <p><b>File Description:</b> Important document about terms.</p>
+            <p><b>File Size:</b> 28.16MB</p>
             <div class="actions">
-                <button><i class="fas fa-share"></i> Share</button>
-                <button><i class="fas fa-edit"></i> Edit</button>
-                <button><i class="fas fa-trash"></i> Delete</button>
+                
+                <button><i class="fi fi-rr-arrow-up-right-from-square"></i><a>Open</a></button>
+                <button><i class="fi fi-rr-share"></i> <a>Share</a></button>
+                <button><i class="fi fi-rr-trash"></i> <a>Delete</a></button>
             </div>
         </aside>
+        <div class="bot-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bot-message-square"><path d="M12 6V2H8"/><path d="m8 18-4 4V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2Z"/><path d="M2 12h2"/><path d="M9 11v2"/><path d="M15 11v2"/><path d="M20 12h2"/></svg>
+        </div>
     </div>
 </body>
 </html>
